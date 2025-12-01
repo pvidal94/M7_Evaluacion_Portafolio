@@ -21,47 +21,63 @@
 
     <div class="card shadow border-0">
         <div class="card-body p-0">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="bg-light text-secondary">
-                    <tr>
-                        <th class="ps-4">ID</th>
-                        <th>ACTIVIDAD</th>
-                        <th>FECHAS</th>
-                        <th>ESTADO</th>
-                        {% if perms.gestion_municipal.delete_actividadproyecto %}
-                        <th>ACCIONES</th>
-                        {% endif %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for act in actividades %}
-                    <tr>
-                        <td class="ps-4 fw-bold">{{ act.activity_id }}</td>
-                        <td>
-                            <div class="fw-bold">{{ act.nombre_actividad }}</div>
-                            <small class="text-muted">{{ act.responsable }}</small>
-                        </td>
-                        <td>
-                            <small class="d-block">Inicio: {{ act.fecha_inicio|date:"d/m/y" }}</small>
-                            <small class="d-block">Fin: {{ act.fecha_termino|date:"d/m/y" }}</small>
-                        </td>
-                        <td>
-                            <span class="badge {% if act.estado == 'Completado' %}bg-success{% elif act.estado == 'Atrasado' %}bg-danger{% else %}bg-warning text-dark{% endif %}">
-                                {{ act.estado }}
-                            </span>
-                        </td>
-                        
-                        {% if perms.gestion_municipal.delete_actividadproyecto %}
-                        <td>
-                            <a href="{% url 'eliminar_actividad' act.id %}" class="btn btn-outline-danger btn-sm" onclick="return confirm('¿Seguro que desea eliminar esta actividad?');">
-                                <i class="bi bi-trash"></i>
-                            </a>
-                        </td>
-                        {% endif %}
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light text-secondary">
+                        <tr>
+                            <th class="ps-4">ID</th>
+                            <th>ACTIVIDAD / PROYECTO</th>
+                            <th>FECHAS</th>
+                            <th>ESTADO</th>
+                            {% if perms.gestion_municipal.change_actividadproyecto or perms.gestion_municipal.delete_actividadproyecto %}
+                            <th>ACCIONES</th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for act in actividades %}
+                        <tr>
+                            <td class="ps-4 fw-bold">{{ act.activity_id }}</td>
+                            
+                            <td>
+                                <a href="{% url 'detalle_actividad' act.id %}" class="fw-bold text-primary text-decoration-none d-block">
+                                    {{ act.nombre_actividad }}
+                                </a>
+                                <small class="text-muted">
+                                    Proyecto: {{ act.proyecto_padre.nombre|default:"[No Asignado]" }}
+                                </small>
+                            </td>
+                            
+                            <td>
+                                <small class="d-block">Inicio: {{ act.fecha_inicio|date:"d/m/y" }}</small>
+                                <small class="d-block">Fin: {{ act.fecha_termino|date:"d/m/y" }}</small>
+                            </td>
+                            <td>
+                                <span class="badge {% if act.estado == 'Completado' %}bg-success{% elif act.estado == 'Atrasado' %}bg-danger{% else %}bg-warning text-dark{% endif %}">
+                                    {{ act.estado }}
+                                </span>
+                            </td>
+                            
+                            {% if perms.gestion_municipal.change_actividadproyecto or perms.gestion_municipal.delete_actividadproyecto %}
+                            <td>
+                                {% if perms.gestion_municipal.change_actividadproyecto %}
+                                <a href="{% url 'editar_actividad' act.id %}" class="btn btn-warning btn-sm me-2">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                {% endif %}
+
+                                {% if perms.gestion_municipal.delete_actividadproyecto %}
+                                <a href="{% url 'eliminar_actividad' act.id %}" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que desea eliminar esta actividad?');">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                                {% endif %}
+                            </td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

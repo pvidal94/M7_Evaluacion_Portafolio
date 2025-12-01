@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="fw-bold text-danger">🚨 Reporte de Gestión: Actividades Atrasadas</h2>
+    <p class="text-muted">Consulta avanzada utilizando el ORM de Django (Filter, Values, Annotate, Count) para identificar cuellos de botella por director.</p>
+
+    <div class="card shadow border-0 mt-4">
+        <div class="card-header bg-danger text-white">
+            Detalle por Oficina
+        </div>
+        <div class="card-body">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Oficina Responsable</th>
+                        <th># Tareas Atrasadas</th>
+                        <th>Detalle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in reporte %}
+                    <tr>
+                        <td>{{ item.responsable }}</td>
+                        <td><span class="badge bg-danger fs-6">{{ item.total_atrasos }}</span></td>
+                        <td>{{ item.responsable|default:"[Director no asignado]" }} es responsable de {{ item.total_atrasos }} tareas.</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center text-success py-3">¡No hay actividades atrasadas en este momento!</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

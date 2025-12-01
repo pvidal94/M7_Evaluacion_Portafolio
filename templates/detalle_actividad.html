@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <a href="{% url 'lista_actividades' %}" class="btn btn-outline-secondary mb-3">
+        <i class="bi bi-arrow-left"></i> Volver a la Lista
+    </a>
+
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Detalle de Actividad: {{ actividad.nombre_actividad }}</h4>
+        </div>
+        <div class="card-body">
+            
+            <div class="row">
+                <div class="col-md-6 border-end">
+                    <h5 class="fw-bold text-primary mb-3"><i class="bi bi-diagram-3-fill"></i> Relaciones y Responsables</h5>
+                    
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong>Proyecto Padre (1:M):</strong> 
+                            <span class="float-end">{{ actividad.proyecto_padre.nombre }}</span>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Código de Proyecto:</strong> 
+                            <span class="float-end">{{ actividad.proyecto_padre.codigo }}</span>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Funcionario Responsable:</strong> 
+                            <span class="float-end">{{ actividad.responsable.username|upper }}</span>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Cargo Asignado:</strong> 
+                            <span class="float-end">{{ actividad.responsable.perfilfuncionario.get_cargo_display }}</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-md-6">
+                    <h5 class="fw-bold text-secondary mb-3"><i class="bi bi-clock-fill"></i> Información de Tarea</h5>
+                    
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong>ID Actividad:</strong> 
+                            <span class="float-end">{{ actividad.activity_id }}</span>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Fecha Inicio:</strong> 
+                            <span class="float-end text-success">{{ actividad.fecha_inicio|date:"d/m/Y" }}</span>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Fecha Término:</strong> 
+                            <span class="float-end text-danger">{{ actividad.fecha_termino|date:"d/m/Y" }}</span>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Estado Actual:</strong> 
+                            <span class="float-end">
+                                <span class="badge {% if actividad.estado == 'Completado' %}bg-success{% elif actividad.estado == 'Atrasado' %}bg-danger{% else %}bg-warning text-dark{% endif %}">
+                                    {{ actividad.estado }}
+                                </span>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-4 text-end">
+                {% if perms.gestion_municipal.change_actividadproyecto %}
+                <a href="{% url 'editar_actividad' actividad.id %}" class="btn btn-warning me-2">
+                    <i class="bi bi-pencil-square"></i> Editar Tarea
+                </a>
+                {% endif %}
+                
+                {% if perms.gestion_municipal.delete_actividadproyecto %}
+                <a href="{% url 'eliminar_actividad' actividad.id %}" class="btn btn-danger" onclick="return confirm('¿CONFIRMAS ELIMINAR ESTA ACTIVIDAD?');">
+                    <i class="bi bi-trash"></i> Eliminar
+                </a>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
