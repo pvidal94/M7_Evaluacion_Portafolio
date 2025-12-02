@@ -1,6 +1,6 @@
 # 🏛️ Dashboard de Gestión Municipal: Ilustre Municipalidad de Puyehue
 
-**Proyecto de Portafolio Web Desarrollado por [Tu Nombre Completo]**
+**Proyecto de Portafolio Web Desarrollado por Patricia VIdal Uribe**
 
 Este sistema es una aplicación integrada para el seguimiento de la gestión y el control de presupuesto, desarrollado íntegramente con el framework **Django**. Demuestra dominio en desarrollo Full Stack, arquitectura MVT y la implementación de un robusto control de acceso basado en roles (RBAC).
 
